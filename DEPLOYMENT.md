@@ -1,8 +1,8 @@
 # Publishing on GitHub Pages
 
-Planned address: `https://hassoundev.github.io/muslim-prayer-support/`
-(account `HassounDev`, repository `muslim-prayer-support`). It is **not live**
-until step 5 succeeds.
+Address: `https://hassoundev.github.io/muslim-prayer-support/`
+(account `HassounDev`, repository `muslim-prayer-support`). Live since
+2026-11-22; steps 1 to 4 are kept for reference.
 
 ## 1. Support email (done)
 
@@ -67,7 +67,7 @@ missing pages answer 404. Then, in a private browser window and on a phone:
   open over HTTPS without signing in; Arabic is right to left;
 - the language selector keeps the same page;
 - the email link opens a new message to the right address; send yourself one;
-- the Privacy Policy link opens the document without signing in.
+- the Privacy Policy opens, with the right date and contact email.
 
 ## 6. App Store Connect (after step 5 only)
 
@@ -77,11 +77,18 @@ missing pages answer 404. Then, in a private browser window and on a phone:
 | fr-FR | `https://hassoundev.github.io/muslim-prayer-support/fr/` |
 | ar-SA | `https://hassoundev.github.io/muslim-prayer-support/ar/` |
 
-In the app repository these values belong in
+Privacy Policy URL (all locales, and `AppLinks.privacyPolicy` in the app; a test
+keeps them identical): `https://hassoundev.github.io/muslim-prayer-support/privacy.html`.
+Keep this address stable: published app versions link to it. Versions that link
+to the Google Doc need that document to stay online and up to date.
+
+In the app repository the support URLs belong in
 `docs/app-store/metadata/<locale>/support_url.txt` (now `TODO_SUPPORT_URL`).
 
 ## Later
 
+- **Privacy policy**: edit `content/privacy.py` in the three languages and change
+  `UPDATED`.
 - **Update**: edit, `python3 build.py`, `python3 tools/check_site.py --release`,
   commit, push; Pages republishes (caches last up to about 10 minutes).
 - **Other address or custom domain**: change `baseUrl` in `site.json` and

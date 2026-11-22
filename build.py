@@ -15,18 +15,18 @@ ROOT = Path(__file__).resolve().parent
 OUT = ROOT / "docs"
 sys.path.insert(0, str(ROOT))
 sys.dont_write_bytecode = True
-from content import ar, en, fr  # noqa: E402
+from content import ar, en, fr, privacy as policy  # noqa: E402
 
 CONF = json.loads((ROOT / "site.json").read_text("utf-8"))
 BASE = CONF["baseUrl"].rstrip("/")
 BASE_PATH = urlsplit(BASE).path  # "/muslim-prayer-support", "" on a root domain
 EMAIL = CONF["supportEmail"]
-PRIVACY = CONF["privacyPolicyUrl"]
 EMAIL_READY = re.fullmatch(r"[^@\s]+@[^@\s]+\.[^@\s]+", EMAIL) is not None
 
 LANGS = {"en": en.T, "fr": fr.T, "ar": ar.T}
 DIRS = {"en": "", "fr": "fr/", "ar": "ar/"}
-PAGES = {"home": "", "faq": "faq.html", "contact": "contact.html"}
+PAGES = {"home": "", "faq": "faq.html", "contact": "contact.html",
+         "privacy": "privacy.html"}
 
 # Order of the FAQ. The ids are anchors (faq.html#adhan-30s): keep them stable,
 # they can be used in support replies.
@@ -53,7 +53,11 @@ def check_content():
     ids = [q for _, qs in FAQ for q in qs]
     assert len(ids) == len(set(ids)), "duplicate FAQ id"
     ref = LANGS["en"]
+    def shape_of(sections):
+        return [(i, [p[:2] for p in ps if p[:2] in ("- ", "##")], len(ps)) for i, _, ps in sections]
+
     for lang, t in LANGS.items():
+        assert shape_of(policy.SECTIONS[lang]) == shape_of(policy.EN), (lang, "policy")
         assert t.keys() == ref.keys(), (lang, t.keys() ^ ref.keys())
         assert set(t["cats"]) == {c for c, _ in FAQ}, (lang, "cats")
         assert set(t["faq"]) == set(ids), (lang, set(t["faq"]) ^ set(ids))
@@ -100,7 +104,8 @@ def blocks(paragraphs, lang):
             items.append(inline(p[2:], lang))
         else:
             flush()
-            out.append(f"<p>{inline(p, lang)}</p>")
+            tag, text = ("h3", p[4:]) if p.startswith("### ") else ("p", p)
+            out.append(f"<{tag}>{inline(text, lang)}</{tag}>")
     flush()
     return "\n".join(out)
 
@@ -130,8 +135,7 @@ def email_link(lang, cls="email"):
 
 def privacy_link(lang, cls=""):
     t = LANGS[lang]
-    return (f'<a class="{cls}" href="{html.escape(PRIVACY)}" rel="noopener noreferrer">{inline(t["privacy_link"], lang)}</a>'
-            f'<span class="hint">{inline(t["privacy_hint"], lang)}</span>')
+    return f'<a class="{cls}" href="{rel(lang, lang, "privacy")}">{inline(t["privacy_link"], lang)}</a>'
 
 
 def lang_switch(lang, page):
@@ -153,15 +157,13 @@ def layout(lang, page, body):
     og_alt = "\n".join(f'<meta property="og:locale:alternate" content="{o["og_locale"]}">'
                        for c, o in LANGS.items() if c != lang)
 
-    def nav_item(key):
+    def nav_item(key, label=""):
         cur = ' aria-current="page"' if key == page else ""
-        return f'<li><a href="{rel(lang, lang, key)}"{cur}>{inline(t["nav_" + key], lang)}</a></li>'
+        return f'<li><a href="{rel(lang, lang, key)}"{cur}>{inline(t[label or "nav_" + key], lang)}</a></li>'
 
-    nav = "".join(nav_item(k) for k in PAGES)
-
-    def privacy_item(key):
-        return (f'<li><a href="{html.escape(PRIVACY)}" rel="noopener noreferrer">'
-                f'{inline(t[key], lang)}</a></li>')
+    nav = "".join(nav_item(k) for k in PAGES if k != "privacy")
+    nav_top = nav + nav_item("privacy", "nav_privacy_header")  # shorter in French
+    nav_foot = nav + nav_item("privacy")
 
     return f"""<!doctype html>
 <html lang="{lang}" dir="{"rtl" if lang == "ar" else "ltr"}">
@@ -198,7 +200,7 @@ def layout(lang, page, body):
 <header class="top">
 <div class="wrap top-in">
 <a class="brand" href="{rel(lang, lang, "home")}"><img src="{assets}/icon.svg" width="36" height="36" alt=""><span><bdi>Muslim Prayer</bdi></span></a>
-<nav class="main" aria-label="{attr(t["nav_main"], lang)}"><ul>{nav}{privacy_item("nav_privacy_header")}</ul></nav>
+<nav class="main" aria-label="{attr(t["nav_main"], lang)}"><ul>{nav_top}</ul></nav>
 {lang_switch(lang, page)}
 </div>
 </header>
@@ -208,7 +210,7 @@ def layout(lang, page, body):
 <footer class="foot">
 <div class="wrap foot-in">
 <p>{inline(t["footer_note"], lang)}<br><span class="copy">© {CONF["year"]} <bdi>Muslim Prayer</bdi></span></p>
-<nav aria-label="{attr(t["nav_main"], lang)} (2)"><ul>{nav}{privacy_item("nav_privacy")}</ul></nav>
+<nav aria-label="{attr(t["nav_main"], lang)} (2)"><ul>{nav_foot}</ul></nav>
 </div>
 </footer>
 </body>
@@ -298,6 +300,33 @@ def contact(lang):
 </div>"""
 
 
+def policy_text(paragraphs, lang):
+    out = blocks(paragraphs, lang)
+    out = re.sub(r"https://[^\s<]+", lambda m: f'<a href="{m[0]}" rel="noopener noreferrer"><bdi dir="ltr">{m[0]}</bdi></a>', out)
+    site = f'<a href="{rel(lang, lang, "home")}"><bdi dir="ltr">{url(lang, "home")}</bdi></a>'
+    return out.replace("{email}", email_link(lang, "")).replace("{site}", site)
+
+
+def privacy(lang):
+    t = LANGS[lang]
+    secs = policy.SECTIONS[lang]
+    toc = "".join(f'<li><a href="#{i}">{inline(title, lang)}</a></li>' for i, title, _ in secs)
+    body = "".join(f'<section id="{i}" aria-labelledby="h-{i}"><h2 id="h-{i}">{n}. {inline(title, lang)}</h2>'
+                   f"{policy_text(ps, lang)}</section>" for n, (i, title, ps) in enumerate(secs, 1))
+    note = ""
+    if t["privacy_translation"]:
+        note = (f'<div class="note plain"><p>{inline(t["privacy_translation"], lang)} '
+                f'<a href="{rel(lang, "en", "privacy")}" lang="en" hreflang="en"><bdi>Privacy Policy</bdi></a></p></div>')
+    return f"""<div class="pagehead"><div class="wrap"><h1>{inline(t["privacy_h1"], lang)}</h1>
+<p class="lead">{inline(t["privacy_updated"], lang)} {policy.UPDATED[lang]}</p></div></div>
+<div class="wrap faq policy">
+<nav class="toc" aria-label="{attr(t["faq_toc"], lang)}"><h2>{inline(t["faq_toc"], lang)}</h2><ul>{toc}</ul></nav>
+<div class="faq-body">{note}
+{body}
+</div>
+</div>"""
+
+
 def not_found():
     """GitHub Pages serves this for any missing path: absolute links only."""
     parts = "".join(
@@ -335,7 +364,7 @@ def sitemap():
 
 def main():
     check_content()
-    render = {"home": home, "faq": faq, "contact": contact}
+    render = {"home": home, "faq": faq, "contact": contact, "privacy": privacy}
     for lang in LANGS:
         folder = OUT / DIRS[lang]
         folder.mkdir(parents=True, exist_ok=True)

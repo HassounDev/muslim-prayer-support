@@ -45,7 +45,11 @@ T = {
     "privacy_card_title": "Votre vie privée",
     "privacy_card": "La Politique de confidentialité explique ce que l’application traite et les choix dont vous disposez.",
     "privacy_link": "Lire la Politique de confidentialité",
-    "privacy_hint": "S’ouvre dans Google Docs, en anglais",
+    "privacy_title": "Politique de confidentialité – Muslim Prayer",
+    "privacy_desc": "Politique de confidentialité de l’application Muslim Prayer : les informations qui peuvent être traitées, leur utilisation, vos choix et vos droits.",
+    "privacy_h1": "Politique de confidentialité",
+    "privacy_updated": "Dernière mise à jour :",
+    "privacy_translation": "Ce texte est une traduction. La version anglaise est la version de référence :",
 
     "faq_title": "FAQ – Muslim Prayer",
     "faq_desc": "Réponses sur les heures de prière et les méthodes de calcul, la position et la vie privée, les notifications et l’Adhan, la boussole Qibla, le Coran, les adhkar et le calendrier hégirien dans Muslim Prayer.",

@@ -137,6 +137,14 @@ li::marker { color: var(--accent); }
 .contact-side section { margin-bottom: 2rem; }
 .contact-side h2 { font-size: 1.2rem; margin-bottom: .5rem; }
 
+/* Privacy policy */
+.policy section { max-width: 44rem; }
+.policy section ul { padding-inline-start: 1.25rem; margin-bottom: .9rem; }
+.policy section li { margin-bottom: .35rem; }
+.policy section h3 { font-size: 1.08rem; margin: 1.4rem 0 .5rem; }
+.policy .note { max-width: 44rem; margin-bottom: 2rem; padding: 1rem 1.25rem; }
+.policy .note a { color: inherit; }
+
 /* Footer, 404 */
 .foot { background: var(--navy-deep); color: #c3ccda; font-size: .95rem; border-top: 3px solid var(--gold); }
 .foot-in { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem 2rem; padding-block: 1.75rem; }
@@ -160,6 +168,7 @@ li::marker { color: var(--accent); }
   .sec { padding-block: 2.5rem; }
   .faq { gap: 2rem; padding-top: 1.5rem; }
   .toc { position: static; }
+  .policy .toc { display: none; }
 }
 @media (max-width: 30rem) {
   .brand { gap: .5rem; font-size: .98rem; }

@@ -6,8 +6,9 @@ backend, cookies, analytics or third-party requests.
 
 | Path | What |
 |---|---|
-| `site.json` | Site address, **support email**, privacy policy URL |
+| `site.json` | Site address, **support email** |
 | `content/en.py` `fr.py` `ar.py` | All texts. Same keys in the three files; the build stops if they differ |
+| `content/privacy.py` | Privacy policy in the three languages (English is the reference) and its date |
 | `build.py` | Builds `docs/` (Python 3 standard library only) |
 | `docs/` | The published site. HTML is generated; `docs/assets/` is edited by hand |
 | `tools/preview.py` | Local preview at the same sub-path as GitHub Pages |

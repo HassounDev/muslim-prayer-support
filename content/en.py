@@ -47,7 +47,11 @@ T = {
     "privacy_card_title": "Your privacy",
     "privacy_card": "The Privacy Policy explains what the app processes and the choices you have.",
     "privacy_link": "Read the Privacy Policy",
-    "privacy_hint": "Opens in Google Docs, in English",
+    "privacy_title": "Privacy Policy – Muslim Prayer",
+    "privacy_desc": "Privacy Policy of the Muslim Prayer app: what information may be processed, how it is used, and the choices and rights you have.",
+    "privacy_h1": "Privacy Policy",
+    "privacy_updated": "Last updated:",
+    "privacy_translation": "",
 
     "faq_title": "FAQ – Muslim Prayer",
     "faq_desc": "Answers about prayer times and calculation methods, location and privacy, notifications and Adhan, Qibla compass, Quran, Adhkar and the Hijri calendar in Muslim Prayer.",

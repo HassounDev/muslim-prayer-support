@@ -18,11 +18,10 @@ ROOT = Path(__file__).resolve().parent.parent
 DOCS = ROOT / "docs"
 CONF = json.loads((ROOT / "site.json").read_text("utf-8"))
 BASE = CONF["baseUrl"].rstrip("/") + "/"
-PRIVACY = CONF["privacyPolicyUrl"]
-EXPECTED_PRIVACY = ("https://docs.google.com/document/d/1N44JQ4huydzqZc0Ibdk7IAWQGMgm_pN5pPzlLWqxU9c"
-                    "/edit?usp=sharing")
+# The only pages outside the site, linked from the privacy policy.
+EXTERNAL = {"https://firebase.google.com/support/privacy", "https://policies.google.com/privacy"}
 LANGS = ("en", "fr", "ar")
-PAGES = [p + n for p in ("", "fr/", "ar/") for n in ("index.html", "faq.html", "contact.html")]
+PAGES = [p + n for p in ("", "fr/", "ar/") for n in ("index.html", "faq.html", "contact.html", "privacy.html")]
 errors = []
 
 
@@ -76,8 +75,6 @@ def local(path):
 
 def check():
     pages = {p: Page((DOCS / p).read_text("utf-8")) for p in PAGES + ["404.html"]}
-    if PRIVACY != EXPECTED_PRIVACY:
-        err("site.json", "privacyPolicyUrl is not the canonical URL")
     mailto = f"mailto:{CONF['supportEmail']}?"
     for name, p in pages.items():
         own = urljoin(BASE, name)
@@ -88,7 +85,7 @@ def check():
         if p.no_alt:
             err(name, "image without alt")
         for link in p.links:
-            if link == PRIVACY or link.startswith(mailto):
+            if link in EXTERNAL and "privacy" in name or link.startswith(mailto):
                 continue
             target = urljoin(own, link)
             if not target.startswith(BASE):
@@ -112,11 +109,11 @@ def check():
                 err(name, f"bad absolute URL {href}")
         if not p.title or not 50 <= len(p.meta.get("description") or "") <= 260:
             err(name, "title/description")
-        if PRIVACY not in p.links:
+        if "privacy.html" not in p.links:
             err(name, "no privacy link")
         if ("faq" not in name) and not any(link.startswith(mailto) for link in p.links):
             err(name, "no email link")
-    for kind in ("index", "faq", "contact"):
+    for kind in ("index", "faq", "contact", "privacy"):
         same = {tuple(pages[f"{d}{kind}.html"].ids) for d in ("", "fr/", "ar/")}
         if len(same) != 1:
             err(kind, "ids differ between languages")
@@ -124,7 +121,7 @@ def check():
 
 
 def release():
-    bad = ("SUPPORT_EMAIL_TO_BE_PROVIDED", "is-placeholder\"", "TODO", "example.com", "[YOUR")
+    bad = ("SUPPORT_EMAIL_TO_BE_PROVIDED", "is-placeholder\"", "TODO", "example.com", "[YOUR", "[DEVELOPER", "{email}", "{site}", "docs.google")
     for f in DOCS.rglob("*.html"):
         text = f.read_text("utf-8")
         for b in bad:
