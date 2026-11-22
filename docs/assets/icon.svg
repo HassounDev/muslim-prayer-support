@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <title>Muslim Prayer app icon</title>
+  <defs>
+    <radialGradient id="bg" cx="512" cy="430" r="720" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#17325E"/>
+      <stop offset="0.55" stop-color="#0D1F40"/>
+      <stop offset="1" stop-color="#060F22"/>
+    </radialGradient>
+    <pattern id="girih" width="112" height="112" patternUnits="userSpaceOnUse" x="456.0" y="456.0">
+      <path d="M67.5 28.3L72.2 39.8L83.7 44.5L79 56L83.7 67.5L72.2 72.2L67.5 83.7L56 79L44.5 83.7L39.8 72.2L28.3 67.5L33 56L28.3 44.5L39.8 39.8L44.5 28.3L56 33Z" fill="none" stroke="#E3CB86" stroke-width="2"/>
+      <path d="M11.5 -27.7L16.2 -16.2L27.7 -11.5L23 0L27.7 11.5L16.2 16.2L11.5 27.7L0 23L-11.5 27.7L-16.2 16.2L-27.7 11.5L-23 0L-27.7 -11.5L-16.2 -16.2L-11.5 -27.7L-0 -23ZM123.5 -27.7L128.2 -16.2L139.7 -11.5L135 0L139.7 11.5L128.2 16.2L123.5 27.7L112 23L100.5 27.7L95.8 16.2L84.3 11.5L89 0L84.3 -11.5L95.8 -16.2L100.5 -27.7L112 -23ZM11.5 84.3L16.2 95.8L27.7 100.5L23 112L27.7 123.5L16.2 128.2L11.5 139.7L0 135L-11.5 139.7L-16.2 128.2L-27.7 123.5L-23 112L-27.7 100.5L-16.2 95.8L-11.5 84.3L-0 89ZM123.5 84.3L128.2 95.8L139.7 100.5L135 112L139.7 123.5L128.2 128.2L123.5 139.7L112 135L100.5 139.7L95.8 128.2L84.3 123.5L89 112L84.3 100.5L95.8 95.8L100.5 84.3L112 89Z" fill="none" stroke="#E3CB86" stroke-width="2"/>
+    </pattern>
+    <radialGradient id="patternFade" cx="512" cy="512" r="640" gradientUnits="userSpaceOnUse">
+      <stop offset="0.35" stop-color="#fff" stop-opacity="0"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="1"/>
+    </radialGradient>
+    <mask id="patternMask" maskUnits="userSpaceOnUse" x="-512" y="-512" width="2048" height="2048">
+      <rect x="-512" y="-512" width="2048" height="2048" fill="url(#patternFade)"/>
+    </mask>
+    <linearGradient id="gold" x1="300" y1="200" x2="720" y2="840" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#F6E3AA"/>
+      <stop offset="0.45" stop-color="#DDBB66"/>
+      <stop offset="1" stop-color="#B0863A"/>
+    </linearGradient>
+    <linearGradient id="emerald" x1="512" y1="180" x2="512" y2="850" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#17936D"/>
+      <stop offset="0.55" stop-color="#0C6249"/>
+      <stop offset="1" stop-color="#063F2F"/>
+    </linearGradient>
+    <linearGradient id="ivory" x1="380" y1="360" x2="640" y2="700" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFF8E6"/>
+      <stop offset="0.6" stop-color="#F1DDA4"/>
+      <stop offset="1" stop-color="#D6B262"/>
+    </linearGradient>
+  </defs>
+  <g id="background">
+    <rect x="-512" y="-512" width="2048" height="2048" fill="url(#bg)"/>
+    <rect x="-512" y="-512" width="2048" height="2048" fill="url(#girih)" opacity="0.10" mask="url(#patternMask)"/>
+  </g>
+  <g id="symbol">
+    
+    <path d="M642.1 197.9L696 328L826.1 381.9L772.2 512L826.1 642.1L696 696L642.1 826.1L512 772.2L381.9 826.1L328 696L197.9 642.1L251.8 512L197.9 381.9L328 328L381.9 197.9L512 251.8Z" fill="url(#emerald)" stroke="url(#gold)" stroke-width="14" stroke-linejoin="round"/>
+    
+    <path d="M626.8 234.8L674.4 349.6L789.2 397.2L741.6 512L789.2 626.8L674.4 674.4L626.8 789.2L512 741.6L397.2 789.2L349.6 674.4L234.8 626.8L282.4 512L234.8 397.2L349.6 349.6L397.2 234.8L512 282.4Z" fill="none" stroke="#E3CB86" stroke-width="3" stroke-linejoin="round" opacity="0.55"/>
+    
+    <path d="M720.1 521.1A176 176 0 1 1 524.7 304.1A148 148 0 1 0 720.1 521.1Z" fill="url(#ivory)"/>
+  </g>
+</svg>
